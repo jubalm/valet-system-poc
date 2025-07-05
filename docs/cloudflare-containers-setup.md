@@ -1,6 +1,6 @@
-# Cloudflare Workers + Containers HTTP Passthrough
+# Cloudflare Containers Setup Guide
 
-This project demonstrates a production-ready HTTP passthrough architecture using Cloudflare Workers, Durable Objects, and Containers to proxy requests to a Convex backend running on the edge.
+Complete setup instructions for deploying a Convex backend using Cloudflare Workers and Containers with HTTP passthrough architecture.
 
 ## Architecture
 

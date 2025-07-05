@@ -1,24 +1,38 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides team-shared guidance for Claude Code when working with this repository.
 
 ## Project Overview
 
-This is a React + TypeScript application built with Vite and deployed to Cloudflare Workers. The project combines a React frontend with a Cloudflare Worker backend in a single application.
+This is a Cloudflare Workers + Containers application demonstrating HTTP passthrough architecture. It combines a React frontend with a Cloudflare Worker backend that proxies requests to a containerized Convex backend running on the edge.
 
 ## Architecture
 
 - **Frontend**: React 19 with TypeScript, built with Vite
-- **Backend**: Cloudflare Worker (`worker/index.ts`) that handles API routes
-- **Build Tool**: Vite with Cloudflare plugin for integrated development
-- **Deployment**: Cloudflare Workers with static asset handling
+- **Backend**: Cloudflare Worker with Durable Objects managing container lifecycle
+- **Container**: Custom Convex backend running in Cloudflare Containers
+- **Deployment**: Integrated Cloudflare Workers + Containers platform
 
-The application follows a full-stack pattern where:
-- Static assets are served from the root
-- API routes (starting with `/api/`) are handled by the Worker
-- Everything else falls back to the React SPA
+The application follows this pattern:
+```
+Browser → Cloudflare Worker → Durable Object → Container → Convex Backend
+```
 
-## Key Commands
+## Team Development Standards
+
+### Code Quality
+- Always run `npm run lint` before commits
+- Use TypeScript strictly - no `any` types
+- Follow existing patterns for error handling and logging
+- Prefer editing existing files over creating new ones
+
+### Testing Standards
+- Test locally before deployment: `npm run dev`
+- Verify production builds: `npm run build`
+- Use container testing for backend changes
+- Monitor deployment success with `wrangler tail`
+
+### Key Commands
 
 - `npm run dev` - Start development server with hot reload
 - `npm run build` - Build both frontend and worker (`tsc -b && vite build`)
@@ -27,30 +41,22 @@ The application follows a full-stack pattern where:
 - `npm run deploy` - Build and deploy to Cloudflare Workers
 - `npm run cf-typegen` - Generate TypeScript types for Cloudflare bindings
 
-## Development Workflow
+### File Organization
+- `src/` - React frontend application
+- `worker/` - Cloudflare Worker and Durable Object code
+- `docs/` - Technical documentation with descriptive filenames
+- `.claude/` - Claude-specific project memory and settings
 
-1. Use `npm run dev` for local development - this runs both the Vite dev server and Worker in development mode
-2. The Worker serves API routes while Vite handles the frontend with HMR
-3. Always run `npm run lint` before commits to ensure code quality
-4. Use `npm run build` to verify production builds work correctly
+## Configuration Management
 
-## Configuration Files
+- `wrangler.jsonc` - Cloudflare deployment configuration
+- `vite.config.ts` - Frontend build configuration
+- Multiple TypeScript configs for different environments
+- Environment variables managed through Dockerfile and wrangler config
 
-- `wrangler.jsonc` - Cloudflare Worker configuration
-- `vite.config.ts` - Vite configuration with Cloudflare plugin
-- `tsconfig.json` - Root TypeScript config that references app, node, and worker configs
-- Multiple TypeScript configs for different parts of the application:
-  - `tsconfig.app.json` - Frontend application
-  - `tsconfig.node.json` - Node.js build tools
-  - `tsconfig.worker.json` - Cloudflare Worker
+## API Patterns
 
-## File Structure
-
-- `src/` - React application source code
-- `worker/` - Cloudflare Worker source code
-- `public/` - Static assets served by Vite
-- `worker-configuration.d.ts` - TypeScript definitions for Worker environment
-
-## API Integration
-
-The frontend makes API calls to `/api/` routes which are handled by the Worker. The Worker returns JSON responses and uses Cloudflare's `Response.json()` helper.
+- All `/api/*` routes handled by Worker
+- HTTP passthrough to containerized backend
+- Proper error handling with fallback responses
+- JSON responses using Cloudflare's `Response.json()` helper

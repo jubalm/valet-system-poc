@@ -16,18 +16,27 @@
 	"containers": [
 		{
 			"name": "convex-backend",
-			"image": "ghcr.io/convex-dev/convex-backend:latest",
-			"class_name": "ConvexBackend"
+			"image": "./Dockerfile",
+			"class_name": "Container",
+			"max_instances": 1
 		}
 	],
 	"durable_objects": {
 		"bindings": [
 			{
-				"class_name": "CodeExecutor",
-				"name": "CODE_EXECUTOR"
-			},
+				"class_name": "Container",
+				"name": "CONTAINER"
+			}
 		]
 	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"Container"
+			]
+		}
+	],
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement

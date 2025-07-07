@@ -2,6 +2,8 @@
 
 This file contains Claude-specific instructions and memory for the valet-init project.
 
+**Note**: This serves as both project-specific memory and user global preferences for this development session.
+
 ## Project Architecture
 
 This is a Cloudflare Workers + Containers application that implements HTTP passthrough from Workers to a containerized Convex backend. The architecture follows this pattern:
@@ -57,3 +59,46 @@ Browser → Cloudflare Worker → Durable Object → Container → Convex Backen
 - Use Durable Objects for container lifecycle management
 - Implement proper error handling with diagnostics
 - Follow SQLite-backed Durable Objects pattern for performance
+
+## Global Development Preferences
+
+### Code Style Standards
+- **TypeScript**: Strict mode, no `any` types, prefer interfaces for objects
+- **React**: Functional components with hooks, proper error boundaries
+- **Imports**: Organize as: node_modules → internal hooks → components → types
+- **Naming**: kebab-case directories, PascalCase components, camelCase utilities
+
+### shadcn/ui Integration Preferences
+- Use latest component variants with composition over configuration
+- Customize via CSS variables, use Tailwind for one-off styling
+- Always validate components work with React 19 concurrent features
+
+### Error Handling Standards
+```typescript
+// Frontend: Proper error typing and handling
+try {
+  const result = await apiCall()
+  return result
+} catch (error) {
+  if (error instanceof ApiError) {
+    // Handle specific errors
+  }
+  throw error
+}
+
+// Backend: Proper HTTP status codes
+return Response.json(
+  { error: 'Resource not found' },
+  { status: 404 }
+)
+```
+
+### Security Best Practices
+- Never commit secrets, use proper environment validation
+- Server-side authentication validation with CSRF protection
+- Input validation with TypeScript contracts and sanitization
+
+### Documentation Standards
+- Comment complex business logic, not obvious code
+- Use JSDoc for public APIs with usage examples
+- Include architecture diagrams and troubleshooting guides

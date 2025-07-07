@@ -118,6 +118,8 @@ Browser → Cloudflare Worker → Durable Object → Container → Convex Backen
 - `@docs/technical-architecture.md` - System architecture details
 - `@docs/development-workflows.md` - Development processes and workflows
 - `@docs/cloudflare-containers-setup.md` - Deployment guide
+- `@docs/cloudflare-containers-unknowns.md` - Platform limitations and unknowns
+- `@docs/convex-self-hosting-challenges.md` - Implementation challenges and solutions
 
 ### Container Management
 - Containers managed via Durable Objects in `worker/index.ts:3`

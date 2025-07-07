@@ -43,6 +43,24 @@ This directory contains comprehensive documentation for the Valet System PoC pro
 - Troubleshooting common issues
 - Performance metrics and security considerations
 
+### [Cloudflare Containers: Unknowns & Limitations](./cloudflare-containers-unknowns.md)
+**Critical Research Findings**
+- Beta platform limitations and constraints
+- Ephemeral storage and persistence challenges
+- Networking and geographic placement issues
+- Performance implications and cold start concerns
+- Production readiness assessment
+- Risk mitigation strategies
+
+### [Convex Self-Hosting Challenges](./convex-self-hosting-challenges.md)
+**Implementation Strategy**
+- Database persistence solutions for ephemeral containers
+- R2 file storage integration patterns
+- Port access and dashboard proxy implementation
+- Performance optimization strategies
+- Production deployment roadmap
+- Known issues and concrete workarounds
+
 ## 🔧 Configuration Files
 
 ### Project-Level Configuration
@@ -100,6 +118,8 @@ This directory contains comprehensive documentation for the Valet System PoC pro
 | Technical Architecture | ✅ Complete | Current | - |
 | Development Workflows | ✅ Complete | Current | - |
 | Cloudflare Containers Setup | ✅ Complete | Existing | - |
+| Cloudflare Containers Unknowns | ✅ Complete | Current | - |
+| Convex Self-Hosting Challenges | ✅ Complete | Current | - |
 | Documentation Index | ✅ Complete | Current | - |
 
 ## 🔄 Maintenance Schedule

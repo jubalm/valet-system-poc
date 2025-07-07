@@ -375,19 +375,54 @@ docker history convex-backend
 
 ### 11. Troubleshooting Workflows
 
-#### Common Issues and Solutions
+#### Container Port Access Issues (Most Common)
 
-**Container Not Starting**
-```bash
-# Check wrangler configuration
-cat wrangler.jsonc | grep max_instances
+**⚠️ Critical Issue: "container port not found" Error**
 
-# Verify container image
-docker run --rm convex-backend
+**Symptoms:**
+- Error: "container port not found" 
+- 502 Bad Gateway on `/api/*` routes
+- Container builds successfully but endpoints fail
 
-# Check environment variables
-docker run --rm -e DO_NOT_REQUIRE_SSL=true convex-backend
+**Root Cause:** Missing `defaultPort` in Container class
+
+**Solution:**
+```typescript
+// ✅ CORRECT: Container class with defaultPort
+export class ConvexContainer extends Container {
+    defaultPort = 3210;  // This is CRITICAL!
+    sleepAfter = "30m";
+    
+    async fetch(request: Request) {
+        return await this.containerFetch(request);
+    }
+}
 ```
+
+**Testing Container Access:**
+```bash
+# 1. Start development server
+npx wrangler dev
+
+# 2. Test container endpoint (in new terminal)
+curl http://localhost:8787/api/ -v
+
+# Expected: HTTP 404 (not "container port not found")
+# 404 means container is accessible, just no endpoints configured
+
+# 3. Verify frontend works
+curl http://localhost:8787/
+# Expected: React HTML content
+```
+
+**Container Debugging Checklist:**
+- [ ] Container class has `defaultPort = 3210` property
+- [ ] Using simple `containerFetch(request)` (no manual port parameter) 
+- [ ] No manual container lifecycle management in constructor
+- [ ] No manual state checking in fetch method
+- [ ] Getting HTTP responses (not "container port not found")
+
+#### Other Common Issues
 
 **Build Failures**
 ```bash
@@ -411,6 +446,31 @@ wrangler deployments list
 # Retry deployment
 npm run deploy
 ```
+
+**Development Server Issues**
+```bash
+# Stop any running wrangler processes
+pkill -f "wrangler dev"
+
+# Restart development server
+npx wrangler dev
+
+# Note: wrangler dev runs indefinitely (use Ctrl+C to stop)
+```
+
+**Container State Debugging**
+```bash
+# View container logs in real-time
+npx wrangler tail
+
+# Check container configuration
+cat wrangler.jsonc | grep -A 10 containers
+
+# Verify Dockerfile is minimal
+cat Dockerfile
+```
+
+See [Cloudflare Containers Troubleshooting Guide](./cloudflare-containers-troubleshooting.md) for comprehensive debugging information.
 
 ### 12. Documentation Workflow
 

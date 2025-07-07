@@ -17,14 +17,14 @@
 		{
 			"name": "convex-backend",
 			"image": "./Dockerfile",
-			"class_name": "Container",
+			"class_name": "ConvexContainer",
 			"max_instances": 1
 		}
 	],
 	"durable_objects": {
 		"bindings": [
 			{
-				"class_name": "Container",
+				"class_name": "ConvexContainer",
 				"name": "CONTAINER"
 			}
 		]
@@ -33,7 +33,7 @@
 		{
 			"tag": "v1",
 			"new_sqlite_classes": [
-				"Container"
+				"ConvexContainer"
 			]
 		}
 	],

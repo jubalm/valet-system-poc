@@ -37,6 +37,104 @@ The system provides:
 - Sets up Durable Object bindings and migrations
 - Uses SQLite backend for optimal performance
 
+## Container Implementation Best Practices
+
+### ✅ Correct Container Class Pattern
+
+**Critical Requirements:**
+- Must include `defaultPort` property
+- Use simple `containerFetch(request)` pattern
+- Avoid manual container lifecycle management
+
+```typescript
+import { Container } from '@cloudflare/containers';
+
+export class ConvexContainer extends Container {
+    defaultPort = 3210;  // ⭐ CRITICAL: This property is required!
+    sleepAfter = "30m";   // Optional: Container idle timeout
+    
+    async fetch(request: Request) {
+        // ✅ Simple pattern - let Container class handle complexity
+        return await this.containerFetch(request);
+    }
+}
+```
+
+### ❌ Common Mistakes to Avoid
+
+**Missing defaultPort (causes "container port not found"):**
+```typescript
+export class BrokenContainer extends Container {
+    // ❌ MISSING: defaultPort property
+    async fetch(request: Request) {
+        return await this.containerFetch(request, 3210); // Won't work without defaultPort
+    }
+}
+```
+
+**Manual container lifecycle management:**
+```typescript
+export class OverComplexContainer extends Container {
+    defaultPort = 3210;
+    
+    constructor(ctx: DurableObjectState, env: Env) {
+        super(ctx, env);
+        // ❌ WRONG: Manual startup logic not needed
+        if (!this.ctx.container?.running) {
+            this.ctx.container?.start();
+        }
+    }
+    
+    async fetch(request: Request) {
+        // ❌ WRONG: Manual state checking not needed
+        if (!this.ctx.container?.running) {
+            return new Response("Container not running", { status: 500 });
+        }
+        return await this.containerFetch(request);
+    }
+}
+```
+
+### Worker Routing Pattern
+
+```typescript
+export default {
+    async fetch(request, env): Promise<Response> {
+        const url = new URL(request.url);
+
+        // Route API requests to container
+        if (url.pathname.startsWith("/api/")) {
+            const containerId = env.CONTAINER.idFromName('convex-backend');
+            const containerStub = env.CONTAINER.get(containerId);
+            return await containerStub.fetch(request);
+        }
+        
+        // Serve frontend or other assets
+        return new Response(null, { status: 404 });
+    },
+} satisfies ExportedHandler<Env>;
+```
+
+### Testing Container Implementation
+
+**1. Verify Container Access:**
+```bash
+# Should return HTTP responses (404, 200, etc.) not "container port not found"
+curl http://localhost:8787/api/ -v
+```
+
+**2. Expected Response Pattern:**
+- ✅ HTTP status codes (404 Not Found is normal for unconfigured endpoints)
+- ❌ "container port not found" error indicates missing `defaultPort`
+
+**3. Debugging Steps:**
+1. Check Container class has `defaultPort = 3210`
+2. Verify simple `containerFetch(request)` usage
+3. Remove any manual container management code
+4. Test with minimal configuration first
+
+See [Cloudflare Containers Troubleshooting Guide](./cloudflare-containers-troubleshooting.md) for detailed debugging information.
+
 ## Setup
 
 ### Prerequisites

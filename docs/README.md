@@ -38,10 +38,17 @@ This directory contains comprehensive documentation for the Valet System PoC pro
 **Deployment Guide**
 - Complete setup instructions for Cloudflare Workers + Containers
 - Architecture overview and component descriptions
-- Configuration details and environment variables
+- Container implementation best practices and common mistakes
 - API endpoints and monitoring guidance
-- Troubleshooting common issues
 - Performance metrics and security considerations
+
+### [Cloudflare Containers Troubleshooting](./cloudflare-containers-troubleshooting.md)
+**Critical Issue Resolution**
+- Comprehensive guide for "container port not found" error
+- Container class implementation patterns and debugging
+- Systematic testing methodology for container issues
+- Environment variables investigation and findings
+- Best practices for Container class development
 
 ### [Cloudflare Containers: Unknowns & Limitations](./cloudflare-containers-unknowns.md)
 **Critical Research Findings**
@@ -90,8 +97,9 @@ This directory contains comprehensive documentation for the Valet System PoC pro
 
 ### For Deployment & Operations
 1. **Deployment Process**: [Cloudflare Containers Setup](./cloudflare-containers-setup.md)
-2. **Monitoring & Debugging**: [Development Workflows - Monitoring](./development-workflows.md#8-monitoring-and-debugging-workflows)
-3. **Troubleshooting**: [Development Workflows - Troubleshooting](./development-workflows.md#11-troubleshooting-workflows)
+2. **Container Issues**: [Cloudflare Containers Troubleshooting](./cloudflare-containers-troubleshooting.md)
+3. **Monitoring & Debugging**: [Development Workflows - Monitoring](./development-workflows.md#8-monitoring-and-debugging-workflows)
+4. **General Troubleshooting**: [Development Workflows - Troubleshooting](./development-workflows.md#11-troubleshooting-workflows)
 
 ## 🔗 External References
 
@@ -117,7 +125,8 @@ This directory contains comprehensive documentation for the Valet System PoC pro
 | Project Requirements Plan | ✅ Complete | Current | - |
 | Technical Architecture | ✅ Complete | Current | - |
 | Development Workflows | ✅ Complete | Current | - |
-| Cloudflare Containers Setup | ✅ Complete | Existing | - |
+| Cloudflare Containers Setup | ✅ Complete | Updated | - |
+| Cloudflare Containers Troubleshooting | ✅ Complete | New | - |
 | Cloudflare Containers Unknowns | ✅ Complete | Current | - |
 | Convex Self-Hosting Challenges | ✅ Complete | Current | - |
 | Documentation Index | ✅ Complete | Current | - |
